@@ -1,0 +1,32 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
+
+# Дані для електронної бібліотеки
+data = {
+    "Рейтинг": [3.5, 4.0, 4.5, 5.0, 3.8, 4.2, 4.7, 3.9, 4.1, 4.8],
+    "Сторінки": [120, 200, 150, 300, 180, 220, 250, 170, 210, 190],
+    "Завантаження_минулого": [400, 700, 600, 1000, 650, 800, 950, 720, 850, 980],
+    "Популярність": [0, 1, 0, 1, 0, 1, 1, 0, 1, 1]  # 1 = популярна ( >800 завантажень)
+}
+
+df = pd.DataFrame(data)
+
+# Вибір ознак і цільової змінної
+X = df[["Рейтинг", "Сторінки", "Завантаження_минулого"]]
+y = df["Популярність"]
+
+# Поділ на тренувальні та тестові дані
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Створення і навчання моделі
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# Прогноз
+y_pred = model.predict(X_test)
+
+# Оцінка моделі
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print("Класифікаційний звіт:\n", classification_report(y_test, y_pred))
